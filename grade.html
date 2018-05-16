@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+
+        body {
+            text-align: center;
+        }
+
+        table {
+            margin: 0px auto;
+        }
+
+    </style>
+
+</head>
+<body onload="reload()">
+<form action="grade.php" method="get">
+    <br><br>
+    <h1>성적입력 프로그램</h1>
+    <br>
+    <h3>학생 성적 입력하기</h3>
+    <br>
+    <table border="none" id="gradeInformation" style="border-collapse: collapse">
+        <tr>
+            <td>이름 : <input type="text" name="name" id="student"></td>
+            <td>국어 : <input type="text" name="korean" id="ko"></td>
+            <td>영어 : <input type="text" name="english" id="en"></td>
+            <td>수학 : <input type="text" name="math" id="ma"></td>
+            <td><input type="submit" value="입력" name="submit" onclick="ajax(this)"></td>
+            <td><input type="button" value="성적순 정렬" name="submit" onclick="sort('asc')"></td>
+            <td><input type="button" name="submit" value="성적역순 정렬" onclick="sort('desc')"></td>
+
+    </table>
+
+    <br><br><br>
+    <table width="1000" border="1" style="border-collapse: collapse; text-align: center" id="gradeTable">
+        <tr>
+            <td>번호</td>
+            <td>이름</td>
+            <td>국어</td>
+            <td>영어</td>
+            <td>수학</td>
+            <td>합계</td>
+            <td>평균</td>
+            <td>삭제</td>
+        </tr>
+    </table>
+</form>
+
+<script>
+    function ajax(arg) {
+
+        var req = new XMLHttpRequest();
+        var gradeInformation = document.getElementById("gradeInformation");
+        var student = document.getElementById("student");
+        var koGrade = document.getElementById("ko");
+        var enGrade = document.getElementById("en");
+        var maGrade = document.getElementById("ma");
+
+        req.open("get", url, true);
+
+        var url = "grade.php";
+        url += "?mode=" + input + "&name=" + student.value +
+            "&korean=" + kograde.value + "&english=" + engrade.value + "&math=" + magrade.value;
+
+        req.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                gradeTable.innerHTML = req.responseText;
+            }
+        };
+
+        req.send();
+    }
+
+    function reload() { // 출력
+        var req = new XMLHttpRequest();
+
+        req.open("GET", url, true);
+        var url = "grade.php";
+
+        url += "?mode=" + reload;
+
+        req.onreadystatechange = function () {
+
+            if (this.readyState == 4 && this.status == 200) {
+                gradeTable.innerHTML = req.responseText;
+            }
+        };
+
+        req.send();
+    }
+
+    function deleterow(num) {
+        var req = new XMLHttpRequest();
+
+        req.open("GET", url, true);
+        var url = "grade.php";
+
+        url += "?mode=" + delete+"&number=" + num;
+
+
+        req.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                gradeTable.innerHTML = req.responseText;
+            }
+        };
+
+        req.send();
+
+    }
+
+    function sort(arg) {
+        var req = new XMLHttpRequest();
+
+        var url = "grade.php";
+        url += "?mode=" + arg;
+
+        req.open("GET", url, true);
+
+        req.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                gradeTable.innerHTML = req.responseText;
+            }
+        };
+
+        req.send();
+    }
+
+</script>
+</body>
+</html>
